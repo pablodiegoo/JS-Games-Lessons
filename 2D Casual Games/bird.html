@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Flappy Bird</title>
+
+</head>
+<style>
+</style>
+
+
+<body>
+
+  <h3>Flappy Bird:<span id="result"></span></h3>
+  <canvas id="canvas" width="288" height="512"></canvas>
+  <h3>Console:</h3>
+  <span id="console"></span>
+
+
+</body>
+
+<script>
+  var tt = "";
+  var consolelog = function (tt) {
+    document.getElementById('console').innerHTML = tt + '<br>'
+  }
+
+  var canvas = document.getElementById("canvas");
+  var ctx = canvas.getContext("2d");
+
+  var bird = new Image();
+  var bg = new Image();
+  var chao = new Image();
+  var canocima = new Image();
+  var canobaixo = new Image();
+  // var [bird,bg,chao,canocima,canobaixo] = new Image();
+  bird.src = "images/bird.png";
+  bg.src = "images/bg.png";
+  chao.src = "images/chao.png";
+  canocima.src = "images/canocima.png";
+  canobaixo.src = "images/canobaixo.png";
+
+  var eec = 100;
+  var constant;
+  var bX = 33;
+  var bY = 200;
+  var gravity = 1.4;
+  var score = 0;
+
+
+  var cano = [];
+
+  cano[0] = {
+    x: canvas.width,
+    y: 0
+  }
+
+  var fly = new Audio();
+  var scor = new Audio();
+  fly.src = "sounds/fly.mp3"
+  scor.src = "sounds/score.mp3"
+
+  document.addEventListener("keydown", voa);
+  function voa() {
+    bY -= 26;
+    fly.play();
+  }
+
+  function jogo() {
+    ctx.drawImage(bg, 0, 0);
+    for (let i = 0; i < cano.length; i++) {
+      constant = canocima.height + eec;
+      ctx.drawImage(canocima, cano[i].x, cano[i].y);
+      ctx.drawImage(canobaixo, cano[i].x, cano[i].y + constant);
+      cano[i].x = cano[i].x - 1
+      if (cano[i].x == 125) {
+        cano.push({
+          x: canvas.width,
+          y: Math.floor(Math.random() * canocima.height) - canocima.height
+        })
+      }
+      if (bX + bird.width >= cano[i].x && bX <= cano[i].x + canocima.width 
+        && (bY <= cano[i].y + canocima.height || bY + bird.height >= cano[i].y + constant)
+        || bY+bird.height >= canvas.height - chao.height) {
+          location.reload()
+      }
+      if (cano[i].x == 5){
+        score++;
+        scor.play();
+      }
+    }
+    ctx.drawImage(chao, 0, canvas.height - chao.height);
+    ctx.drawImage(bird, bX, bY);
+    bY += gravity
+    ctx.fillStyle = "#000";
+    ctx.font = "20px Verdana";
+    ctx.fillText("Placar: "+score,10,canvas.height-20);
+    requestAnimationFrame(jogo);
+
+  }
+
+  jogo();
+</script>
+
+</html>
