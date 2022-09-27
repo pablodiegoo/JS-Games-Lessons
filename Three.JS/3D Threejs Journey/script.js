@@ -1,7 +1,7 @@
 import './style.css'
 import * as THREE from 'three'
 import gsap from 'gsap'
-import { OrbitControls } from '../../../three/examples/jsm/controls/OrbitControls.js'
+import { OrbitControls } from './OrbitControls.js'
 
 // Cursor
 const cursor = {
